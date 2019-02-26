@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -11,23 +12,25 @@ import (
 	"net/url"
 )
 
-const (
-	baseUrl = ""
-)
+var baseUrl string
+
+type RespJson struct {
+	Ret int    `json:"ret"`
+	Msg string `json:"msg"`
+}
 
 func main() {
-	email := ""
-	passwd := ""
-	cookies := login(email, passwd)
-	//fmt.Print(cookies)
+	url := flag.String("url", "", "url")
+	email := flag.String("email", "", "email")
+	passwd := flag.String("passwd", "", "password")
+	flag.Parse()
+
+	baseUrl = *url
+	cookies := login(*email, *passwd)
 	checkin(cookies)
 }
 
 func login(email, passwd string) []*http.Cookie {
-	type RespJson struct {
-		Ret int    `json:"ret"`
-		Msg string `json:"msg"`
-	}
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -59,10 +62,6 @@ func login(email, passwd string) []*http.Cookie {
 }
 
 func checkin(cookies []*http.Cookie) {
-	type RespJson struct {
-		Ret int    `json:"ret"`
-		Msg string `json:"msg"`
-	}
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
