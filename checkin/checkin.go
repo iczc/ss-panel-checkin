@@ -47,6 +47,7 @@ func (c *Checkin) login() ([]*http.Cookie, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -61,6 +62,7 @@ func (c *Checkin) login() ([]*http.Cookie, error) {
 	if loginResp.Ret != 1 {
 		return nil, fmt.Errorf("Login failed")
 	}
+
 	log.Println("Login successful")
 	return resp.Cookies(), nil
 
@@ -92,6 +94,7 @@ func (c *Checkin) Handle() error {
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
