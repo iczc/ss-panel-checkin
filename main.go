@@ -18,10 +18,6 @@ func init() {
 	flag.StringVar(&email, "email", "", "user email")
 	flag.StringVar(&passwd, "passwd", "", "user password")
 	flag.Parse()
-
-	if host == "" || email == "" || passwd == "" {
-		log.Fatal("Missing argument")
-	}
 }
 
 func main() {

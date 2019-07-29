@@ -23,6 +23,10 @@ type Checkin struct {
 }
 
 func NewCheckin(host string, email string, passwd string) *Checkin {
+	if host == "" || email == "" || passwd == "" {
+		log.Fatal("Missing argument")
+	}
+
 	return &Checkin{
 		host:   host,
 		email:  email,
@@ -44,20 +48,20 @@ func (c *Checkin) login() ([]*http.Cookie, error) {
 		return nil, err
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	var loginjson response
-	// loginjson := &response{}
-	if err = json.Unmarshal([]byte(body), &loginjson); err != nil {
+	var loginResp response
+	// loginResp := &response{}
+	if err = json.Unmarshal([]byte(data), &loginResp); err != nil {
 		return nil, err
 	}
-	if loginjson.Ret != 1 {
-		return nil, fmt.Errorf("登陆失败，请检查密码配置")
+	if loginResp.Ret != 1 {
+		return nil, fmt.Errorf("Login failed")
 	}
-	log.Println("登陆成功")
+	log.Println("Login successful")
 	return resp.Cookies(), nil
 
 }
@@ -84,12 +88,12 @@ func (c *Checkin) Handle() error {
 	for _, v := range cookies {
 		req.AddCookie(v)
 	}
-	res, err := client.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
 
-	data, err := ioutil.ReadAll(res.Body)
+	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
