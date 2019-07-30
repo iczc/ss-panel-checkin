@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/ss-panel-checkin/checkin"
+	"github.com/iczc/ss-panel-checkin/checkin"
 )
 
 var (
