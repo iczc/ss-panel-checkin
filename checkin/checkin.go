@@ -54,9 +54,8 @@ func (c *Checkin) login() ([]*http.Cookie, error) {
 		return nil, err
 	}
 
-	var loginResp response
-	// loginResp := &response{}
-	if err = json.Unmarshal([]byte(data), &loginResp); err != nil {
+	loginResp := response{}
+	if err = json.Unmarshal(data, &loginResp); err != nil {
 		return nil, err
 	}
 	if loginResp.Ret != 1 {
@@ -101,6 +100,11 @@ func (c *Checkin) Handle() error {
 		return err
 	}
 
-	log.Println(string(data))
+	checkinResp := response{}
+	if err = json.Unmarshal(data, &checkinResp); err != nil {
+		return err
+	}
+
+	log.Println(checkinResp.Msg)
 	return nil
 }
