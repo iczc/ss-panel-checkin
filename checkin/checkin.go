@@ -22,7 +22,7 @@ type Checkin struct {
 	passwd string
 }
 
-func NewCheckin(host string, email string, passwd string) *Checkin {
+func NewCheckin(host, email, passwd string) *Checkin {
 	if host == "" || email == "" || passwd == "" {
 		log.Fatal("Missing argument")
 	}
